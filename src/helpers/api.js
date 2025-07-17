@@ -1,6 +1,6 @@
 // fetch("https://dummyjson.com/products")
-export const DOMAIN = "https://dummyjson.com";
-export const PRODUCTS_ENDPOINT = "/products";
+export const DOMAIN = process.env.DOMAIN;
+export const PRODUCTS_ENDPOINT = process.env.PRODUCTS_ENDPOINT;
 
 
 // Returns the complete URL for the products endpoint
@@ -9,9 +9,9 @@ export function getEndPointUrl(domain, endpoint) {
 }
 
 // Helper function for error handling
-async function handleApiRequest(httpArguments) {
+async function handleApiRequest(url, options = {}) {
   try {
-    const res = await fetch(httpArguments);
+    const res = await fetch(url, options);
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(errorData.message || "API Error");
@@ -19,7 +19,7 @@ async function handleApiRequest(httpArguments) {
     return await res.json();
   } catch (error) {
     console.error("API Error:", error);
-    return { error: error.message || "Unknown error" };
+    throw { error: error.message || "Unknown error" };
   }
 }
 
