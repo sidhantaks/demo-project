@@ -1,6 +1,6 @@
 // fetch("https://dummyjson.com/products")
-export const DOMAIN = process.env.DOMAIN;
-export const PRODUCTS_ENDPOINT = process.env.PRODUCTS_ENDPOINT;
+export const DOMAIN = process.env.REACT_APP_DOMAIN;
+export const PRODUCTS_ENDPOINT = process.env.REACT_APP_PRODUCTS_ENDPOINT;
 
 
 // Returns the complete URL for the products endpoint
