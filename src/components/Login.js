@@ -17,8 +17,8 @@ function Login() {
       <h2>Login Page</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+          <label htmlFor="email">Email ID:</label>
+          <input type="email" id="email" name="email" required />
         </div><br />
         <div>
           <label htmlFor="password">Password:</label>
