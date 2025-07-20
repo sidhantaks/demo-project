@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import { crudApi, DOMAIN, AUTH_ENDPOINT, encrypt } from "../helpers/api";
 
 function Login() {
   const { setIsLoggedIn } = useContext(AuthContext);
@@ -27,12 +27,16 @@ function Login() {
 
     try {
       // Send login data to backend
-      const res = await axios.post('http://localhost:5000/users/login', formData);
-
-      if (res.data.message === 'Login successful') {
+      formData.password = encrypt(formData.password);
+      //console.log(formData.password);
+      const res = await crudApi.create(DOMAIN, AUTH_ENDPOINT, formData);
+      //console.log("Login API response:", res);
+      if (res.message === 'Login successful') {
         setIsLoggedIn(true);
         navigate('/');
-      }
+      }else {
+      setError(res.message || "Invalid login");
+    }
     } catch (err) {
       setError('Invalid email or password');
       console.error(err);

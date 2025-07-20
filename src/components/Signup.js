@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { updateFormData, resetFormData } from "../redux/signupSlice";
+import { crudApi, DOMAIN, USERS_ENDPOINT, encrypt } from "../helpers/api";
 
 function Signup() {
   const dispatch = useDispatch();
@@ -22,7 +22,12 @@ function Signup() {
 
     try {
       const { confirmPassword, ...dataToSubmit } = formData; // exclude confirmPassword
-      await axios.post("http://localhost:5000/users", formData);
+      // Encrypt sensitive data before sending
+      dataToSubmit.password = encrypt(formData.password);
+      //console.log(dataToSubmit.password);
+      await crudApi.create(DOMAIN, USERS_ENDPOINT, dataToSubmit);
+       // Use the CRUD API to create user
+      //console.log("Data submitted successfully:", dataToSubmit);
       alert("Data submitted!");
       dispatch(resetFormData());
     } catch (err) {

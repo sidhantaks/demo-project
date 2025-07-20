@@ -1,7 +1,13 @@
-// fetch("https://dummyjson.com/products")
+import CryptoJS from "crypto-js";
 export const DOMAIN = process.env.REACT_APP_DOMAIN;
 export const PRODUCTS_ENDPOINT = process.env.REACT_APP_PRODUCTS_ENDPOINT;
+export const USERS_ENDPOINT = process.env.REACT_APP_USERS_ENDPOINT;
+export const AUTH_ENDPOINT = process.env.REACT_APP_AUTH_ENDPOINT;
+export const CRYPTO_SECRET = process.env.REACT_APP_CRYPTO_SECRET;
 
+export const encrypt = (payload) => {
+  return CryptoJS.AES.encrypt(payload, CRYPTO_SECRET).toString();
+}
 
 // Returns the complete URL for the products endpoint
 export function getEndPointUrl(domain, endpoint) {
@@ -31,13 +37,13 @@ export const crudApi = {
     return handleApiRequest(url);
   },
 
-  // Create a new product (data should be an object)
-  create: async (data) => {
-    const url = getEndPointUrl(DOMAIN, PRODUCTS_ENDPOINT);
+  // Create a new 
+  create: async (domain, endpoint, payload) => {
+    const url = getEndPointUrl(domain, endpoint);
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
     return res.json();
   },
