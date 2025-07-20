@@ -32,31 +32,31 @@ export const crudApi = {
   },
 
   // Create a new product (data should be an object)
-//   create: async (data) => {
-//     const url = getEndPointUrl(DOMAIN, PRODUCTS_ENDPOINT);
-//     const res = await fetch(url, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(data),
-//     });
-//     return res.json();
-//   },
+  create: async (data) => {
+    const url = getEndPointUrl(DOMAIN, PRODUCTS_ENDPOINT);
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
 
   // Update a product by id (data should be an object)
-//   update: async (id, data) => {
-//     const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
-//     const res = await fetch(url, {
-//       method: "PUT",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(data),
-//     });
-//     return res.json();
-//   },
+  update: async (id, data) => {
+    const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
 
   // Delete a product by id
-//   remove: async (id) => {
-//     const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
-//     const res = await fetch(url, { method: "DELETE" });
-//     return res.json();
-//   },
+  remove: async (id) => {
+    const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
+    const res = await fetch(url, { method: "DELETE" });
+    return res.json();
+  },
 };

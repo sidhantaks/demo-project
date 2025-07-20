@@ -1,34 +1,56 @@
-import React from 'react'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { updateFormData, resetFormData } from "../redux/signupSlice";
 
 function Signup() {
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state.signup.formData);
+
+  const handleChange = (e) => {
+    dispatch(updateFormData({ [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("http://localhost:5000/users", formData);
+      alert("Data submitted!");
+      dispatch(resetFormData());
+    } catch (err) {
+      console.error(err);
+      alert("Submission failed.");
+    }
+  };
+
   return (
     <div>
       <h2>Signup Page</h2>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="fullname">Full Name:</label>
-          <input type="text" id="fullname" name="fullname" required />
+          <input type="text" value={formData.fullname} onChange={handleChange} name="fullname" required />
         </div><br />
         <div>
           <label htmlFor="email">Email ID:</label>
-          <input type="email" id="email" name="email" required />
+          <input type="email" value={formData.email} onChange={handleChange} name="email" required />
         </div><br />
         <div>
           <label htmlFor="contact">Contact No:</label>
-          <input type="tel" id="contact" name="contact" required />
+          <input type="tel" value={formData.contact} onChange={handleChange} name="contact" required />
         </div><br />
         <div>
           <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" value={formData.password} onChange={handleChange} name="password" required />
         </div><br />
         <div>
           <label htmlFor="city">City:</label>
-          <input type="text" id="city" name="city" required />
+          <input type="text" value={formData.city} onChange={handleChange} name="city" required />
         </div><br />
         <button type="submit">SignUp</button>
-      </form> 
+      </form>
     </div>
-  )
+  );
 }
 
-export default Signup
+export default Signup;
