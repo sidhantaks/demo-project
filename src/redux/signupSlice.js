@@ -6,6 +6,7 @@ const initialState = {
     email: '',
     contact: '',
     password: '',
+    confirmPassword: "",
     city: ''
   }
 };

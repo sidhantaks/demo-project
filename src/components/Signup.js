@@ -13,7 +13,15 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate password match// Validate password match
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
     try {
+      const { confirmPassword, ...dataToSubmit } = formData; // exclude confirmPassword
       await axios.post("http://localhost:5000/users", formData);
       alert("Data submitted!");
       dispatch(resetFormData());
@@ -42,6 +50,10 @@ function Signup() {
         <div>
           <label htmlFor="password">Password:</label>
           <input type="password" value={formData.password} onChange={handleChange} name="password" required />
+        </div><br />
+         <div>
+          <label>Confirm Password:</label>
+          <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
         </div><br />
         <div>
           <label htmlFor="city">City:</label>
