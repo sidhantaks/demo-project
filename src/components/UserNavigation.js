@@ -11,17 +11,17 @@ function UserNavigation() {
         navigate('/');
     };
   return (
-     <div>
-            {!isLoggedIn && (
-                <>
-                    <NavLink to="/login" className="nav-link">Login</NavLink>&nbsp;
-                    <NavLink to="/signup" className="nav-link">Signup</NavLink>&nbsp;
-                </>
-            )}
-            {isLoggedIn && (
-                <button className="nav-link" onClick={handleLogout}>Logout</button>
-            )}
-        </div>
+     <div className="d-flex align-items-center justify-content-end gap-3 px-4">
+      {!isLoggedIn && (
+        <>
+          <NavLink to="/login" className="nav-link text-warning"><b>LOGIN</b></NavLink>
+          <NavLink to="/signup" className="nav-link text-success"><b>SIGNUP</b></NavLink>
+        </>
+      )}
+      {isLoggedIn && (
+        <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
+      )}
+    </div>
   )
 }
 

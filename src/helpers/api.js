@@ -49,20 +49,20 @@ export const crudApi = {
   },
 
   // Update a product by id (data should be an object)
-  update: async (id, data) => {
-    const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
-    const res = await fetch(url, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    return res.json();
+  update: async (domain, endpoint, payload) => {
+  const url = getEndPointUrl(domain, endpoint);
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return res.json();
   },
 
   // Delete a product by id
-  remove: async (id) => {
-    const url = getEndPointUrl(DOMAIN, `${PRODUCTS_ENDPOINT}/${id}`);
-    const res = await fetch(url, { method: "DELETE" });
-    return res.json();
-  },
+  remove: async (domain, endpoint) => {
+  const url = getEndPointUrl(domain, endpoint);
+  const res = await fetch(url, { method: "DELETE" });
+  return res.json();
+},
 };
