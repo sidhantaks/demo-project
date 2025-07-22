@@ -1,7 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { NavLink } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext';
 
 function Navigation() {
+  const { isLoggedIn } = useContext(AuthContext);
+  if (!isLoggedIn) return null; // Hide navigation if not logged in   
   return (
    <nav className="navbar navbar-expand-md navbar-dark bg-dark">
       <div className="container">

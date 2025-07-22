@@ -33,6 +33,7 @@ function Login() {
       //console.log("Login API response:", res);
       if (res.message === 'Login successful') {
         setIsLoggedIn(true);
+        localStorage.setItem('token', res.token);
         navigate('/');
       }else {
       setError(res.message || "Invalid login");
