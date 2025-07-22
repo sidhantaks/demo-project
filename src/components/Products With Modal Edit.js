@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { crudApi, DOMAIN, PRODUCTS_ENDPOINT } from '../helpers/api';
 
 function Products() {
-  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
   const [filter, setFilter] = useState("");
 
-  // Product fields
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
@@ -26,17 +25,29 @@ function Products() {
       });
   }, []);
 
-  const handleOpen = () => {
-    // Reset fields
-    setTitle("");
-    setPrice("");
-    setBrand("");
-    setStock("");
+  const handleOpen = (product = null) => {
+    if (product) {
+      setEditMode(true);
+      setCurrentProduct(product);
+      setTitle(product.title);
+      setPrice(product.price);
+      setBrand(product.brand);
+      setStock(product.stock);
+    } else {
+      setEditMode(false);
+      setCurrentProduct(null);
+      setTitle("");
+      setPrice("");
+      setBrand("");
+      setStock("");
+    }
     setShowModal(true);
   };
 
   const handleClose = () => {
     setShowModal(false);
+    setEditMode(false);
+    setCurrentProduct(null);
     setTitle("");
     setPrice("");
     setBrand("");
@@ -48,17 +59,35 @@ function Products() {
     if (!title || !price) return;
 
     try {
-      const newProduct = await crudApi.create(DOMAIN, PRODUCTS_ENDPOINT, {
-        title,
-        price,
-        brand,
-        stock
-      });
-      setProducts((prev) => [...prev, newProduct?.data || newProduct]);
+      if (editMode && currentProduct) {
+        const productId = currentProduct._id;
+        const updated = await crudApi.update(DOMAIN, `${PRODUCTS_ENDPOINT}/${productId}`, {
+          title,
+          price,
+          brand,
+          stock
+        });
+
+        setProducts((prev) =>
+          prev.map((p) =>
+            p._id === productId
+              ? { ...p, title, price, brand, stock }
+              : p
+          )
+        );
+      } else {
+        const newProduct = await crudApi.create(DOMAIN, PRODUCTS_ENDPOINT, {
+          title,
+          price,
+          brand,
+          stock
+        });
+        setProducts((prev) => [...prev, newProduct?.data || newProduct]);
+      }
       handleClose();
     } catch (err) {
       console.error("Submit error:", err);
-      setError("Failed to add product.");
+      setError("Failed to save product.");
     }
   };
 
@@ -74,7 +103,7 @@ function Products() {
       flexDirection: 'column'
     }}>
       <h2>Products List &nbsp;
-        <button className="btn btn-success" onClick={handleOpen}>Add Product</button>
+        <button className="btn btn-success" onClick={() => handleOpen()}>Add Product</button>
       </h2>
       <input
         type="text"
@@ -98,7 +127,7 @@ function Products() {
           </thead>
           <tbody>
             {filteredProducts.map((product, index) => (
-              <tr key={product._id || index}>
+              <tr key={product._id|| index}>
                 <td>{index + 1}</td>
                 <td>{product.title || 'N/A'}</td>
                 <td>{product.price || 'N/A'}</td>
@@ -106,10 +135,28 @@ function Products() {
                 <td>{product.stock || 'N/A'}</td>
                 <td>
                   <button
-                    className="btn btn-warning"
-                    onClick={() => navigate(`/products/${product._id}`)}
+                    className="btn btn-primary"
+                    onClick={() => handleOpen(product)}
+                    style={{ marginRight: "0.5rem" }}
                   >
-                    View Details
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      if (window.confirm("Are you sure you want to delete this product?")) {
+                        const productId = product._id;
+                         crudApi.remove(DOMAIN, `${PRODUCTS_ENDPOINT}/${productId}`)
+                          .then(() => {
+                            setProducts((prev) =>
+                              prev.filter(p => (p._id) !== productId)
+                            );
+                          })
+                          .catch((err) => console.error("Delete error:", err));
+                      }
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -133,13 +180,13 @@ function Products() {
             borderRadius: "8px",
             minWidth: "300px"
           }}>
-            <h2>Add New Product</h2>
+            <h2>{editMode ? "Edit Product" : "Add New Product"}</h2>
             <form onSubmit={handleSubmit}>
               <input type="text" placeholder="Product Name" value={title} onChange={e => setTitle(e.target.value)} style={{ width: "100%", marginBottom: "1rem" }} />
               <input type="number" placeholder="Product Price" value={price} onChange={e => setPrice(e.target.value)} style={{ width: "100%", marginBottom: "1rem" }} />
               <input type="text" placeholder="Product Brand" value={brand} onChange={e => setBrand(e.target.value)} style={{ width: "100%", marginBottom: "1rem" }} />
               <input type="number" placeholder="Product Stock" value={stock} onChange={e => setStock(e.target.value)} style={{ width: "100%", marginBottom: "1rem" }} />
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <button type="submit" className="btn btn-primary">{editMode ? "Update" : "Submit"}</button>
               <button type="button" className="btn btn-danger" onClick={handleClose} style={{ marginLeft: "1rem" }}>Close</button>
             </form>
           </div>

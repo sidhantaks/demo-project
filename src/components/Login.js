@@ -14,7 +14,6 @@ function Login() {
 
   const [error, setError] = useState('');
 
-  // Update state as user types
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
@@ -26,18 +25,15 @@ function Login() {
     e.preventDefault();
 
     try {
-      // Send login data to backend
       formData.password = encrypt(formData.password);
-      //console.log(formData.password);
       const res = await crudApi.create(DOMAIN, AUTH_ENDPOINT, formData);
-      //console.log("Login API response:", res);
       if (res.message === 'Login successful') {
         setIsLoggedIn(true);
         localStorage.setItem('token', res.token);
         navigate('/');
-      }else {
-      setError(res.message || "Invalid login");
-    }
+      } else {
+        setError(res.message || "Invalid login");
+      }
     } catch (err) {
       setError('Invalid email or password');
       console.error(err);
@@ -45,22 +41,46 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login Page</h2>
+    <div className="container" style={{ maxWidth: '450px', marginTop: '5rem' }}>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h3 className="card-title text-center mb-4">Login</h3>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email ID:</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-        </div><br />
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
-        </div><br />
-        <button type="submit">Login</button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email ID</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="form-control"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
