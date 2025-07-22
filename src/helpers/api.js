@@ -17,7 +17,13 @@ export function getEndPointUrl(domain, endpoint) {
 // Helper function for error handling
 async function handleApiRequest(url, options = {}) {
   try {
-    const res = await fetch(url, options);
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+    });
     if (!res.ok) {
       const errorData = await res.json();
       throw new Error(errorData.message || "API Error");
