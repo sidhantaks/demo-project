@@ -7,8 +7,9 @@ function UserNavigation() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
+        localStorage.removeItem('token');
         setIsLoggedIn(false);
-        navigate('/');
+        navigate('/login');
     };
   return (
      <div className="d-flex align-items-center justify-content-end gap-3 px-4">
