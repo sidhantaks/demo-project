@@ -14,20 +14,16 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password match// Validate password match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
 
     try {
-      const { confirmPassword, ...dataToSubmit } = formData; // exclude confirmPassword
-      // Encrypt sensitive data before sending
+      const { confirmPassword, ...dataToSubmit } = formData;
       dataToSubmit.password = encrypt(formData.password);
-      //console.log(dataToSubmit.password);
+
       await crudApi.create(DOMAIN, USERS_ENDPOINT, dataToSubmit);
-       // Use the CRUD API to create user
-      //console.log("Data submitted successfully:", dataToSubmit);
       alert("Data submitted!");
       dispatch(resetFormData());
     } catch (err) {
@@ -37,35 +33,88 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h2>Signup Page</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="fullname">Full Name:</label>
-          <input type="text" value={formData.fullname} onChange={handleChange} name="fullname" required />
-        </div><br />
-        <div>
-          <label htmlFor="email">Email ID:</label>
-          <input type="email" value={formData.email} onChange={handleChange} name="email" required />
-        </div><br />
-        <div>
-          <label htmlFor="contact">Contact No:</label>
-          <input type="tel" value={formData.contact} onChange={handleChange} name="contact" required />
-        </div><br />
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" value={formData.password} onChange={handleChange} name="password" required />
-        </div><br />
-         <div>
-          <label>Confirm Password:</label>
-          <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
-        </div><br />
-        <div>
-          <label htmlFor="city">City:</label>
-          <input type="text" value={formData.city} onChange={handleChange} name="city" required />
-        </div><br />
-        <button type="submit">SignUp</button>
-      </form>
+    <div className="container" style={{ maxWidth: "500px", marginTop: "3rem" }}>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <h3 className="card-title text-center mb-4">Signup</h3>
+
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="fullname" className="form-label">Full Name</label>
+              <input
+                type="text"
+                className="form-control"
+                name="fullname"
+                value={formData.fullname}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email ID</label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="contact" className="form-label">Contact No</label>
+              <input
+                type="tel"
+                className="form-control"
+                name="contact"
+                value={formData.contact}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+              <input
+                type="password"
+                className="form-control"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="city" className="form-label">City</label>
+              <input
+                type="text"
+                className="form-control"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn btn-primary w-100">Sign Up</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
