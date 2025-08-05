@@ -16,13 +16,13 @@ export function getEndPointUrl(domain, endpoint) {
 
 async function handleApiRequest(url, options = {}) {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     const res = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...(options.headers || {}),
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (!res.ok) {
@@ -46,8 +46,9 @@ export const crudApi = {
     const url = getEndPointUrl(domain, endpoint);
     return handleApiRequest(url, {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: payload,
     });
+    // JSON.stringify(payload)
   },
 
   update: async (domain, endpoint, payload) => {
